@@ -1,8 +1,15 @@
 <!DOCTYPE html>
+
 <html>
 <head>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      * {
+        font-family: Helvetica, Arial, sans-serif;
+      }
+    </style>
     
     <!-- Thanks to "Motherfucking Website" for teaching me how to write this -->
     
@@ -19,8 +26,8 @@
 
 <h2>Introduction</h2>
 <p>Before you skip this introduction, a few words about what you're reading: This language is designed for real-time high-reliability scenarios where ease of programming takes the back seat to correctness and determinism. You can skip ahead if you want to now. </p>
-<p>Still here? Great. I'm Tormod Gjeitnes Hellen. In spring 2015 I made my own programming language for my master thesis. Coming from a real-time/automation background I think I had a fairly rare (though not unique) approach to language design and I thought someone might get some use out of the ideas I came up with during development. Or at least some entertainment. I'm writing this in spring 2016, so I've definitely forgot some details. </p>
-<p>Here I'll explain some of the ideas I came up with when writing my own language. It's preferable to reading the thesis report for most, I would imagine. The thesis report is riddled with academese and passive-voice, and as far as the code quality goes the code generator sucks ass. No, really, I was in a hurry and I'm not exaggerating. Anyway, the thesis with code, bytecode, test files and everything is available here if you want the full-fat or are just allergic to colloquial language: <a href=http://brage.bibsys.no/xmlui/handle/11250/2352463>http://brage.bibsys.no/xmlui/handle/11250/2352463</a></p>
+<p>Still here? Great. I'm Tormod Gjeitnes Hellen. In spring 2015 I made my own programming language for my master thesis. Coming from a real-time/automation background I think I had a fairly rare (though not unique) approach to language design and I thought someone might get some use out of the ideas I came up with during development. Or at least some entertainment. </p>
+<p>Here I'll explain some of the ideas I came up with when writing my own language. It's preferable to reading the thesis report for most, I would imagine. The thesis report is riddled with academese and passive-voice, and as far as the code quality goes the code generator sucks ass. No, really, I was in a hurry and I'm not exaggerating. I'm writing this in spring 2016 and I wrote my thesis on year earlier, so I've definitely forgot some details. The thesis with code, bytecode, test files and everything is available here if you want the full-fat or are just allergic to colloquial language: <a href=http://brage.bibsys.no/xmlui/handle/11250/2352463>http://brage.bibsys.no/xmlui/handle/11250/2352463</a></p>
 
 <h3>Unintentional shortcomings</h3>
 <p> I had one semester and I'm not all that smart or motivated so I didn't have time to do quite a lot. There are no data structures, user defined nor built-in, printing to terminal is the only IO and the standard math operators are replaced with functions that really suck to type. That wasn't intentional. Oh, and it lacks support for multi-file programs. And, you know, lots of other things we take for granted in languages but that weren't the main focus of my thesis. I'll be talking about top threads and underthreads. The underthreads are theoretical as well. </p>
@@ -38,7 +45,7 @@
 <p>More descriptive figure below:</p>
 <img src=archdetailed.png>
 <p>Top threads are here referred to as just "thread". Each shared variable has two copies, and each thread has its own queue of output. Each shared variable have a thread that owns it and can write to it, but all other threads can read it. In the computational phase, the owner thread writes to its own copy of the variable while all other threads read from a public copy. In the communicative phase the public copy is updated with the value of the owner thread's copy. </p>
-<p>Each thread has its own queue of output. This output queue can be added to in the computational phase, and is effected in the communicative phase. The trick is that the queues are effected in a sequence determined at compiler time: Thread 1 goes first, thread 2 thereafter and so on. So output is not only always the same, but it always arrives in the same sequence. But what happens if the queue gets too long and threatens to fill memory completely? The solution would be to make execution of the threads sequential, so no queues would be needed. This isn't implemented and I'm unsure how I woudl do it, honestly. It would probably be easiest to let the programmer give each thread a memory budget, whose breach would trigger the pause of the thread, which could resume execution once all threads whose output are to be effected first have emptied their queues. Then, in such an abnormal situation, output could be effected immediately.</p>
+<p>Each thread has its own queue of output. This output queue can be added to in the computational phase, and is effected in the communicative phase. The trick is that the queues are effected in a sequence determined at compiler time: Thread 1 goes first, thread 2 thereafter and so on. So output is not only always the same, but it always arrives in the same sequence. But what happens if the queue gets too long and threatens to fill memory completely? The solution would be to make execution of the threads sequential, so no queues would be needed. This isn't implemented and I'm unsure how I would do it, honestly. It would probably be easiest to let the programmer give each thread a memory budget, whose breach would trigger the pause of the thread, which could resume execution once all threads whose output are to be effected first have emptied their queues. Then, in such an abnormal situation, output could be effected immediately.</p>
 <p>Input isn't implemented, but the obvious solution to input is to pause the thread for the next communicative phase whenever it requested input and handle it there. </p>
 <p>A nice property of this system is that a top thread is completely isolated in its computational phase and can therefore spawn underthreads during its own execution. The next diagram include them:</p>
 <img src=archdetailedwithmap.png>
@@ -71,11 +78,11 @@ program helloworld:Nothing =
 <pre>
 action actionA:Nothing = 
 {
-  b()
+  actionA()
 }
 action actionB:Nothing =
 {
-  c()
+  actionC()
 }
 action actionC:Nothing =
 {
@@ -86,13 +93,13 @@ action actionC:Nothing =
 <p>In this example it's really easy to see the dependency chain, but in the real world, it's often not. The solution I came up with is that in order for a function to use a function declared at the same level as itself, it needs to have this function as an argument, called "an inclusion". It looks like this:</p>
 <code>
 <pre>
-action actionA(b:Inclusion, c:Inclusion):Nothing = 
+action actionA(actionB:Inclusion, actionC:Inclusion):Nothing = 
 {
-  b(c=c)
+  actionB(c)
 }
-action actionB(c:Inclusion):Nothing =
+action actionB(actionC:Inclusion):Nothing =
 {
-  c()
+  actionC()
 }
 action actionC:Nothing =
 {
