@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- Thanks to "Motherfucking Website" for teaching me how to write this -->
+    
+    <title>Fumurt</title>
+</head>
+
+<body>
+
+<header>
+        <h1>Fumurt - A Programming Language with Deterministic Multithreading: The ideas</h1>
+        <aside></aside>
+    </header>
+
+
+<h2>Introduction</h2>
+<p>Before you skip this introduction, a few words about what you're reading: This language is designed for real-time high-reliability scenarios where ease of programming takes the back seat to correctness and determinism. You can skip ahead if you want to now. </p>
+<p>Still here? Great. I'm Tormod Gjeitnes Hellen. In spring 2015 I made my own programming language for my master thesis. Coming from a real-time/automation background I think I had a fairly rare (though not unique) approach to language design and I thought someone might get some use out of the ideas I came up with during development. Or at least some entertainment. I'm writing this in spring 2016, so I've definitely forgot some details. </p>
+<p>Here I'll explain some of the ideas I came up with when writing my own language. It's preferable to reading the thesis report for most, I would imagine. The thesis report is riddled with academese and passive-voice, and as far as the code quality goes the code generator sucks ass. No, really, I was in a hurry and I'm not exaggerating. Anyway, the thesis with code, bytecode, test files and everything is available here if you want the full-fat or are just allergic to colloquial language: <a href=http://brage.bibsys.no/xmlui/handle/11250/2352463>http://brage.bibsys.no/xmlui/handle/11250/2352463</a></p>
+
+<h3>Unintentional shortcomings</h3>
+<p> I had one semester and I'm not all that smart or motivated so I didn't have time to do quite a lot. There are no data structures, user defined nor built-in, printing to terminal is the only IO and the standard math operators are replaced with functions that really suck to type. That wasn't intentional. Oh, and it lacks support for multi-file programs. And, you know, lots of other things we take for granted in languages but that weren't the main focus of my thesis. I'll be talking about top threads and underthreads. The underthreads are theoretical as well. </p>
+
+<h3>Inspiration and worthy mentions</h3>
+<p>The multithreading concept in this programming language belongs to the synchronous programming family and I therefore owe Esterel a little hat-tip</p>
+<p>If you end up liking what I wrote, I'd suggest you check out <a href=http://www.ceu-lang.org/>Ceu</a>. It's got a lot more man-hours than this has and is the only synchronous programming language I know of which is both active and intended to be used by ordinary people.</p>
+
+<h2>The concepts - let's get to it</h2>
+
+<h3>Deterministic multithreading that feels like conventional multithreading</h3>
+<p> Real-time loves multithreading. Real-time programmers have been doing it for far longer than we've had multicore CPU's. Why? Because it's architecturally neat to give each device in a product its own thread. In reality, these devices are physically independent and so it makes sense to make their logic independent as well. The One Big While-Loop is also a popular solution but it's getting outdated now of course. The trouble with giving each device/robot-arm/whathaveyou their own thread is synchronisation and determinism. Typically this is fixed with painstaking attention to the C/C++/Ada code's correctness. Those that are willing to offer some performance on the altar to determinism have come up with an alternative solution: Synchronous programming. The most widely used implementation, Esterel, has threads that communicate with each other using signals and other unconventional stuff I don't remember. So I set out to come up with something that looked like shared-memory concurrency but that preserved the fundamental idea of synchronous programming: Time is discretized and all operations during a time step are computed from <em>memory as it was at the beginning of the time step</em>.</p>
+<p>I did it using a notion of top threads and underthreads. Underthreads are your classic parallel list comprehensions and futures, as seen in Scala, for example. These are inherently deterministic and therefore unproblematic. But what we want is also some threads that operate from start to end of program execution, with their own areas of responsibility - the top threads. While underthreads do their work and hand the result to the thread that spawned them, top threads never stop. So top threads need a way to communicate with each other that's still deterministic. The solution I found is to divide execution into two phases which repeat indefinitely: A computation phase, in which execution is parallel, and a communication phase, which is sequential. Simple graphic below:</p>
+<img src=architecture.png>
+<p>More descriptive figure below:</p>
+<img src=archdetailed.png>
+<p>Top threads are here referred to as just "thread". Each shared variable has two copies, and each thread has its own queue of output. Each shared variable have a thread that owns it and can write to it, but all other threads can read it. In the computational phase, the owner thread writes to its own copy of the variable while all other threads read from a public copy. In the communicative phase the public copy is updated with the value of the owner thread's copy. </p>
+<p>Each thread has its own queue of output. This output queue can be added to in the computational phase, and is effected in the communicative phase. The trick is that the queues are effected in a sequence determined at compiler time: Thread 1 goes first, thread 2 thereafter and so on. So output is not only always the same, but it always arrives in the same sequence. But what happens if the queue gets too long and threatens to fill memory completely? The solution would be to make execution of the threads sequential, so no queues would be needed. This isn't implemented and I'm unsure how I woudl do it, honestly. It would probably be easiest to let the programmer give each thread a memory budget, whose breach would trigger the pause of the thread, which could resume execution once all threads whose output are to be effected first have emptied their queues. Then, in such an abnormal situation, output could be effected immediately.</p>
+<p>Input isn't implemented, but the obvious solution to input is to pause the thread for the next communicative phase whenever it requested input and handle it there. </p>
+<p>A nice property of this system is that a top thread is completely isolated in its computational phase and can therefore spawn underthreads during its own execution. The next diagram include them:</p>
+<img src=archdetailedwithmap.png>
+<h3>A declaration where you can see all the <em>top</em> threads their shared variables</h3>
+<p>Underthreads (parallel list operations or futures) are completely transparent and therefore not that important when you desire to look at the code from a high point of view. But what about the top threads and their shared variables? In Fumurt they're all collected in a single declaration that replaces the "main" function we know from C and similar languages. Fumurt is not intended for single threaded execution and it's odd that one thread should be the main thread. This declaration is called the "program" and looks like this:</p>
+<code>
+<pre>
+program helloworld:Nothing =
+{
+  synchronized variable synchronizedCounter:Integer = {synchronized(variable=0, writer=threadC)}
+  threadA(synchronizedCounter)
+  threadB(synchronizedCounter)
+  threadC(synchronizedCounter)
+}
+</pre>
+</code>
+<p>Here we see that the program has three threads, all of which uses the "synchronizedCounter" variable, but of which threads only threadC can write to the variable. The shared variable starts with value 0 and is of type integer. Simples. You may notice that there's no mention of when the threads or the program should end or anything like it. The program ends whenever all threads have decided to end. That's not implemented.</p>
+
+<h3>New approaches to functions</h3>
+
+<h4>Impure functions have a dedicated prefix</h4>
+<p>Not terribly original that. Ada has the conept of procedures, which, contrary to functions, can change their input parameters. I take that one step further and say that all impure functions are called actions and their name must be prefaced with "action". Yeah, it's kinda Hungarian notation. I'm not particularly bothered.</p>
+
+<h4>It's functions all the way down</h4>
+<p>You might have noticed in the preceeding section that the program returns nothing. Well, this is for simplicity: Both functions, the program declaration and threads all share the same syntax. I took inspiration from Go(lang) on this. There's no reason threads should look special. It's just much prettier if it looks like a function. </p>
+
+<h4>Dependencies between functions are explicit</h4>
+<p>Say you want to refactor your program, but it's quite a struggle to see exactly which functions require which other functions to work. The way I usually do this is I just move code and then I hammer the code until the compiler errors go away. That doesn't seem like a fitting way to build nuclear reactor software. The solution I came up with is to make dependencies between functions explicit, something that has to be balanced with convenience in order to not become completely obnoxious. This illustrates the problem where functions have dependency chains:</p>
+<code>
+<pre>
+action actionA:Nothing = 
+{
+  b()
+}
+action actionB:Nothing =
+{
+  c()
+}
+action actionC:Nothing =
+{
+  actionPrint("string")
+}
+</pre>
+</code>
+<p>In this example it's really easy to see the dependency chain, but in the real world, it's often not. The solution I came up with is that in order for a function to use a function declared at the same level as itself, it needs to have this function as an argument, called "an inclusion". It looks like this:</p>
+<code>
+<pre>
+action actionA(b:Inclusion, c:Inclusion):Nothing = 
+{
+  b(c=c)
+}
+action actionB(c:Inclusion):Nothing =
+{
+  c()
+}
+action actionC:Nothing =
+{
+  actionPrint("string")
+}
+</pre>
+</code>
+<p> In order to not be impractical, I decided to use recursive function declaration: A function can use any function declared inside it without any extra syntax, however these functions can never be called outside the function they are declared in. This means that if you have a function, which is neither called nor included at the same level as it is declared then you can always cut it out without problems. If this function itself has no inclusions, then it can also be pasted anywhere and still work. Remember that with recursive function definitions a function can be yuuuge, with many sub-functions. </p>
+
+<h4>Function arguments are distinguished by name, not sequence</h4>
+<p>Ever looked at a call to a function and wondered which integer plays which role? I have, and drawing inspiration from Python, all arguments are distinguished by name, not sequence, like this:</p>
+<code>divide(left=5, right=3)</code>
+<p>Which is identical to:</p>
+<code>divide(right=3, left=5)</code>
+<p>That's not terribly exciting. It's actually a pain to type compared to normal math notation, but it's just an example. This, on the other hand, is kind of cool: </p>
+<code>if(condition=true, then=1, else=0)</code>
+
+<h2>A complete code example</h2>
+
+<code>
+<pre>
+program p:Nothing =
+{
+  synchronized variable synchronizedNumber:Integer = {synchronized(variable=0, writer=threadPrintHello)}
+  threadPrintHello(synchronizedNumber)
+  threadPrintWorld(synchronizedNumber)
+  threadPrintBaz(actionPrintFoo=actionPrintFoo, counter=0.0, integerIdentity=integerIdentity)
+}
+
+thread threadPrintWorld(synchronizedNumber:Integer):Nothing =
+{
+  actionPrint("world ")
+  actionPrint(toString(synchronizedNumber))
+  threadPrintWorld(synchronizedNumber)
+}
+  
+thread threadPrintHello(synchronizedNumber:Integer):Nothing =
+{
+  actionPrint(toString(synchronizedNumber))
+  actionPrint(" Hello ")
+  actionMutate(variable=synchronizedNumber, newValue=plus(left=synchronizedNumber, right=1))
+  threadPrintHello(synchronizedNumber)
+}
+
+thread threadPrintBaz(actionPrintFoo:Inclusion, integerIdentity:Inclusion, counter:Double):Nothing =
+{
+  action actionPrintBaz(counter:Double):Nothing =
+  {
+    actionPrint("  BAZ ")
+    actionPrint(toString(counter))
+    actionPrint("   ")
+  }
+
+  actionPrintBaz(counter)
+  actionPrintFoo(integerIdentity)
+  threadPrintBaz(counter=minus(right=1.0, left=counter), actionPrintFoo=actionPrintFoo, integerIdentity=integerIdentity)
+}
+
+action actionPrintFoo(integerIdentity:Inclusion):Nothing =
+{
+  action actionPrintFooo:Nothing =
+  {
+    actionPrint("  FOOO  ")
+  }
+  actionPrint("  FOO   ")
+  actionPrintFooo()
+  actionPrint(toString(integerIdentity(5)))
+  actionPrint("  ")
+  actionPrint(if(condition=true, then=toString(6), else=toString(3)))
+  actionPrint("\n")
+}
+
+function integerIdentity(x:Integer):Integer = {x}
+</pre>
+</code>
+
+<h2>How I implemented it</h2>
+The compiler, written in Scala using the parser-combinator library, converts the source code to C++11 code, which is then fed to a C++ compiler. This isn't terribly important, but I figured some might get curious.
+</body>
+</html>
