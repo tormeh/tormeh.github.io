@@ -41,12 +41,12 @@
 
 
 <h2>Introduction</h2>
-<p>Before you skip this introduction, a few words about what you're reading: This language is designed for real-time high-reliability scenarios where ease of programming takes the back seat to correctness and determinism. You can skip ahead if you want to now. </p>
+<p>Before you skip this introduction, a few words about what you're reading: The language I'm speaking of is designed for real-time high-reliability scenarios where ease of programming takes the back seat to correctness and determinism. It's the anti-PHP, if you want. You can skip ahead if you want to now. </p>
 <p>Still here? Great. I'm Tormod Gjeitnes Hellen. In spring 2015 I made my own programming language for my master thesis. Coming from a real-time/automation background I think I had a fairly rare (though not unique) approach to language design and I thought someone might get some use out of the ideas I came up with during development. Or at least some entertainment. </p>
 <p>Here I'll explain some of the ideas I came up with when writing my own language. It's preferable to reading the thesis report for most, I would imagine. The thesis report is riddled with academese and passive-voice, and as far as the code quality goes the code generator sucks ass. No, really, I was in a hurry and I'm not exaggerating. I'm writing this in spring 2016 and I wrote my thesis on year earlier, so I've definitely forgotten some details. The thesis with code, bytecode, test files and everything is available here if you want the full-fat or are just allergic to colloquial language: <a href=http://brage.bibsys.no/xmlui/handle/11250/2352463>http://brage.bibsys.no/xmlui/handle/11250/2352463</a></p>
 
 <h3>Unintentional shortcomings</h3>
-<p> I had one semester and I'm not all that smart or motivated so I didn't have time to do quite a lot. There are no data structures, user defined nor built-in, printing to terminal is the only IO and the standard math operators are replaced with functions that really suck to type. That wasn't intentional. Oh, and it lacks support for multi-file programs. And, you know, lots of other things we take for granted in languages but that weren't the main focus of my thesis. I'll be talking about top threads and underthreads. The underthreads are theoretical as well. </p>
+<p> I had one semester and I'm not all that smart or motivated so there was plenty I didn't have time to do. There are no data structures, user defined nor built-in, printing to terminal is the only IO and the standard math operators are replaced with functions that really suck to type. That wasn't intentional. Oh, and it lacks support for multi-file programs. And, you know, lots of other things we take for granted in languages but that weren't the main focus of my thesis. I'll be talking about top threads and underthreads. The underthreads are theoretical as well. </p>
 
 <h3>Inspiration and worthy mentions</h3>
 <p>The multithreading concept in this programming language belongs to the synchronous programming family and I therefore owe Esterel a little hat-tip</p>
@@ -76,12 +76,12 @@ program helloworld:Nothing =
   threadC(synchronizedCounter)
 }
 </code></pre>
-<p>Here we see that the program has three threads, all of which uses the "synchronizedCounter" variable, but of which threads only threadC can write to the variable. The shared variable starts with value 0 and is of type integer. Simples. You may notice that there's no mention of when the threads or the program should end or anything like it. The program ends whenever all threads have decided to end. That's not implemented.</p>
+<p>Here we see that the program has three threads, all of which uses the "synchronizedCounter" variable, but of those only threadC can write to the variable. The shared variable starts with value 0 and is of type integer. Simples. You may notice that there's no mention of when the threads or the program should end or anything like it. The program ends whenever all threads have decided to end. I never got around to implementing that.</p>
 
 <h3>New approaches to functions</h3>
 
 <h4>Impure functions have a dedicated prefix</h4>
-<p>Not terribly original that. Ada has the conept of procedures, which, contrary to functions, can change their input parameters. I take that one step further and say that all impure functions are called actions and their name must be prefaced with "action". Yeah, it's kinda Hungarian notation. I'm not particularly bothered.</p>
+<p>Not terribly original that. Ada has the conept of procedures, which, contrary to functions, can change their input parameters. I take that one step further and say that all impure functions are called actions and their name must be prefaced with "action". Yeah, it's kinda Hungarian notation. I'm not particularly bothered. I've decided on doing the same for threads, i.e. they are prefixed with "thread".</p>
 
 <h4>It's functions all the way down</h4>
 <p>You might have noticed in the preceeding section that the program returns nothing. Well, this is for simplicity: Both functions, the program declaration and threads all share the same syntax. I took inspiration from Go(lang) on this. There's no reason threads should look special. It's just much prettier if it looks like a function. </p>
@@ -121,11 +121,11 @@ action actionC:Nothing =
 
 <h4>Function arguments are distinguished by name, not sequence</h4>
 <p>Ever looked at a call to a function and wondered which integer plays which role? I have, and drawing inspiration from Python, all arguments are distinguished by name, not sequence, like this:</p>
-<code>divide(left=5, right=3)</code>
+<pre><code>divide(left=5, right=3)</code></pre>
 <p>Which is identical to:</p>
-<code>divide(right=3, left=5)</code>
+<pre><code>divide(right=3, left=5)</code></pre>
 <p>That's not terribly exciting. It's actually a pain to type compared to normal math notation, but it's just an example. This, on the other hand, is kind of cool: </p>
-<code>if(condition=true, then=1, else=0)</code>
+<pre><code>if(condition=true, then=1, else=0)</code></pre>
 
 <h2>A complete code example</h2>
 
@@ -185,11 +185,15 @@ function integerIdentity(x:Integer):Integer = {x}
 </code></pre>
 
 <h2>How I implemented it</h2>
-<p>The compiler, written in Scala using the parser-combinator library, converts the source code to C++11 code, which is then fed to a C++ compiler. This isn't terribly important, but I figured some might get curious.</p>
+<p>The compiler, written in Scala using the parser-combinator library, converts the source code to C++11 code, which is then fed to a C++ compiler. This isn't terribly important, but I figured some might get curious. For the C++ people out there: I use thread, atomic, condition_variable and chrono to do the whole multithreading thing.</p>
 
 <h2>The name</h2>
 <p>It's short for functional, multithreaded and real-time. So majestic but for the fact that the abbreviation sounds like the sound a <a href=http://www.headinjurytheater.com/article73.htm>Flumph</a> would make if it could fart.</p>
 
+<h2>Performance</h2>
+<p>Remember when I introduced synchronous programming by saying that it sacrifices performance? Still mostly correct. There are two problems: First, the synchronization has a lot of overhead. Second, all threads always have to wait for the thread that has the most to do per computational phase. The latter can sometimes be fixed using underthreads in the top thread with the most to do, but mostly you'll just have to suck it up. The former problem, on the other hand, can be more interesting: Yes, there is a lot of overhead, but other things have more overhead. For example it's faster to synchronize threads so that only one thread prints to terminal at a time, than to have many unsynchronized threads bombarding the same terminal with requests. Cool, huh? No, you don't care? What? Me? A nerd? Well I have never.... Anyway, plot with explanation below:</p>
+<img src=perf.svg>
+<p>The labels suck, but I'm not in the mood for matplotlib right now so I'll just explain it instead: The benchmark program has three threads that each prints a load of crap to terminal until they have synchronized 20000 times. I achieved this by taking a C++11 file generated using my compiler and then modifying it to quit when a synchronized integer reached 20000. The unsynchronized bar is the time taken to get to this point without any synchronization, including of the variable. The unsynchronized version has no synchronization overhead and even though execution time only depends on the fastest thread it still manages to run twice as slowly! Now, I wanted to see what it looked like if I removed printing to terminal and it turns out that without that limiting factor synchronization is what the program spends the vast majority of its time doing. Keep in mind, though, that this overhead is constant - it does not increase with workload. </p>
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
