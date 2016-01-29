@@ -8,14 +8,26 @@
     <style>
       * {
         font-family: Ubuntu, sans-serif;
+        max-width: 23cm;
+        margin-left: auto;
+        margin-right: auto;
       }
       img {
         max-width: 100%;
         height: auto;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
         }
+      pre {background-color: #eee;}
+      code {
+        font-family: Ubuntu monospace, monospace;
+        white-space: pre-wrap;
+        font-size: 70%;
+      }
     </style>
     
-    <!-- Thanks to "Motherfucking Website" for teaching me how to write this -->
+    <!-- Thanks to "Motherfucking Website" for teaching me how to write HTML -->
     
     <title>Fumurt</title>
 </head>
@@ -55,8 +67,7 @@
 <img src=archdetailedwithmap.svg>
 <h3>A declaration where you can see all the <em>top</em> threads their shared variables</h3>
 <p>Underthreads (parallel list operations or futures) are completely transparent and therefore not that important when you desire to look at the code from a high point of view. But what about the top threads and their shared variables? In Fumurt they're all collected in a single declaration that replaces the "main" function we know from C and similar languages. Fumurt is not intended for single threaded execution and it's odd that one thread should be the main thread. This declaration is called the "program" and looks like this:</p>
-<code>
-<pre>
+<pre><code>
 program helloworld:Nothing =
 {
   synchronized variable synchronizedCounter:Integer = {synchronized(variable=0, writer=threadC)}
@@ -64,8 +75,7 @@ program helloworld:Nothing =
   threadB(synchronizedCounter)
   threadC(synchronizedCounter)
 }
-</pre>
-</code>
+</code></pre>
 <p>Here we see that the program has three threads, all of which uses the "synchronizedCounter" variable, but of which threads only threadC can write to the variable. The shared variable starts with value 0 and is of type integer. Simples. You may notice that there's no mention of when the threads or the program should end or anything like it. The program ends whenever all threads have decided to end. That's not implemented.</p>
 
 <h3>New approaches to functions</h3>
@@ -78,8 +88,7 @@ program helloworld:Nothing =
 
 <h4>Dependencies between functions are explicit</h4>
 <p>Say you want to refactor your program, but it's quite a struggle to see exactly which functions require which other functions to work. The way I usually do this is I just move code and then I hammer the code until the compiler errors go away. That doesn't seem like a fitting way to build nuclear reactor software. The solution I came up with is to make dependencies between functions explicit, something that has to be balanced with convenience in order to not become completely obnoxious. This illustrates the problem where functions have dependency chains:</p>
-<code>
-<pre>
+<pre><code>
 action actionA:Nothing = 
 {
   actionA()
@@ -92,11 +101,9 @@ action actionC:Nothing =
 {
   actionPrint("string")
 }
-</pre>
-</code>
+</code></pre>
 <p>In this example it's really easy to see the dependency chain, but in the real world, it's often not. The solution I came up with is that in order for a function to use a function declared at the same level as itself, it needs to have this function as an argument, called "an inclusion". It looks like this:</p>
-<code>
-<pre>
+<pre><code>
 action actionA(actionB:Inclusion, actionC:Inclusion):Nothing = 
 {
   actionB(c)
@@ -109,8 +116,7 @@ action actionC:Nothing =
 {
   actionPrint("string")
 }
-</pre>
-</code>
+</code></pre>
 <p> In order to not be impractical, I decided to use recursive function declaration: A function can use any function declared inside it without any extra syntax, however these functions can never be called outside the function they are declared in. This means that if you have a function, which is neither called nor included at the same level as it is declared then you can always cut it out without problems. If this function itself has no inclusions, then it can also be pasted anywhere and still work. Remember that with recursive function definitions a function can be yuuuge, with many sub-functions. </p>
 
 <h4>Function arguments are distinguished by name, not sequence</h4>
@@ -123,8 +129,7 @@ action actionC:Nothing =
 
 <h2>A complete code example</h2>
 
-<code>
-<pre>
+<pre><code>
 program p:Nothing =
 {
   synchronized variable synchronizedNumber:Integer = {synchronized(variable=0, writer=threadPrintHello)}
@@ -177,11 +182,13 @@ action actionPrintFoo(integerIdentity:Inclusion):Nothing =
 }
 
 function integerIdentity(x:Integer):Integer = {x}
-</pre>
-</code>
+</code></pre>
 
 <h2>How I implemented it</h2>
-The compiler, written in Scala using the parser-combinator library, converts the source code to C++11 code, which is then fed to a C++ compiler. This isn't terribly important, but I figured some might get curious.
+<p>The compiler, written in Scala using the parser-combinator library, converts the source code to C++11 code, which is then fed to a C++ compiler. This isn't terribly important, but I figured some might get curious.</p>
+
+<h2>The name</h2>
+<p>It's short for functional, multithreaded and real-time. So majestic but for the fact that the abbreviation sounds like the sound a <a href=http://www.headinjurytheater.com/article73.htm>Flumph</a> would make if it could fart.</p>
 
 
 <script>
