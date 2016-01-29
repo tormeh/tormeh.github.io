@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
       * {
-        font-family: Helvetica, Arial, sans-serif;
+        font-family: Ubuntu, sans-serif;
       }
     </style>
     
@@ -27,7 +27,7 @@
 <h2>Introduction</h2>
 <p>Before you skip this introduction, a few words about what you're reading: This language is designed for real-time high-reliability scenarios where ease of programming takes the back seat to correctness and determinism. You can skip ahead if you want to now. </p>
 <p>Still here? Great. I'm Tormod Gjeitnes Hellen. In spring 2015 I made my own programming language for my master thesis. Coming from a real-time/automation background I think I had a fairly rare (though not unique) approach to language design and I thought someone might get some use out of the ideas I came up with during development. Or at least some entertainment. </p>
-<p>Here I'll explain some of the ideas I came up with when writing my own language. It's preferable to reading the thesis report for most, I would imagine. The thesis report is riddled with academese and passive-voice, and as far as the code quality goes the code generator sucks ass. No, really, I was in a hurry and I'm not exaggerating. I'm writing this in spring 2016 and I wrote my thesis on year earlier, so I've definitely forgot some details. The thesis with code, bytecode, test files and everything is available here if you want the full-fat or are just allergic to colloquial language: <a href=http://brage.bibsys.no/xmlui/handle/11250/2352463>http://brage.bibsys.no/xmlui/handle/11250/2352463</a></p>
+<p>Here I'll explain some of the ideas I came up with when writing my own language. It's preferable to reading the thesis report for most, I would imagine. The thesis report is riddled with academese and passive-voice, and as far as the code quality goes the code generator sucks ass. No, really, I was in a hurry and I'm not exaggerating. I'm writing this in spring 2016 and I wrote my thesis on year earlier, so I've definitely forgotten some details. The thesis with code, bytecode, test files and everything is available here if you want the full-fat or are just allergic to colloquial language: <a href=http://brage.bibsys.no/xmlui/handle/11250/2352463>http://brage.bibsys.no/xmlui/handle/11250/2352463</a></p>
 
 <h3>Unintentional shortcomings</h3>
 <p> I had one semester and I'm not all that smart or motivated so I didn't have time to do quite a lot. There are no data structures, user defined nor built-in, printing to terminal is the only IO and the standard math operators are replaced with functions that really suck to type. That wasn't intentional. Oh, and it lacks support for multi-file programs. And, you know, lots of other things we take for granted in languages but that weren't the main focus of my thesis. I'll be talking about top threads and underthreads. The underthreads are theoretical as well. </p>
