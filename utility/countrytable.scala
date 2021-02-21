@@ -1,16 +1,16 @@
 case class Country(name: String, happiness: Double, lifeExpectancy: Double, broadbandSpeed: Double) {
-  val utility: Double = happiness * lifeExpectancy + 0.5 * broadbandSpeed
+  val score: Double = happiness * lifeExpectancy + 0.5 * broadbandSpeed
   def toRow: String = {
     "<tr>" +
     "<td>" + name + "</td>" +
-    "<td>" + utility + "</td>" +
+    "<td>" + score + "</td>" +
     "<td>" + happiness + "</td>" +
     "<td>" + lifeExpectancy + "</td>" +
     "<td>" + broadbandSpeed + "</td>" +
     "</tr>"
   }
   def tableHeader: String = {
-    """<th> name </th> <th> utility </th>
+    """<th> name </th> <th> score </th>
     <th> happiness </th> <th> lifeExpectancy </th>
     <th> broadbandSpeed </th>"""
   }
@@ -25,7 +25,7 @@ case class CountryList(countries: Seq[Country]) {
     </tr>
   </thead>
   <tbody>
-    """ + {countries.sortBy(_.utility).reverse.foldLeft("")((x: String,y: Country) => x + "\n" + y.toRow): String} + """
+    """ + {countries.sortBy(_.score).reverse.foldLeft("")((x: String,y: Country) => x + "\n" + y.toRow): String} + """
   </tbody>
 </table>"""
   }
