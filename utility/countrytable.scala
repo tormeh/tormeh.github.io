@@ -79,6 +79,13 @@ val countries = CountryList(List(
   Country("Hungary", 6.000, 76.9, 185.92, 17666, 43.6),
   Country("Chile", 6.228, 80.2, 171.02, 19231, 35.5),
   Country("China", 5.124, 77.5, 162.12, 20942, 38.4),
+  Country("Russia", 5.546, 72.9, 81.16, 3683, 40.3),
+  Country("Turkey", 5.132, 77.7, 30.51, 6568, 32.2),
+  Country("Iran", 4.672, 76.7, 19.42, 5254, 31.7),
+  Country("Pakistan", 5.693, 67.3, 10.84, 1766, 22.0),
+  Country("Botswana", 3.479, 69.6, 9.71, 4550, 25.7),
+  Country("India", 3.573, 70.4, 54.73, 3042, 28.7),
+  Country("Brazil", 6.376, 76.7, 79.30, 5031, 33.2),
 ))
 
 println(countries.toTable)
