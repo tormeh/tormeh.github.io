@@ -38,6 +38,7 @@ case class CountryList(countries: Seq[Country]) {
 //https://en.wikipedia.org/wiki/List_of_countries_by_life_expectancy
 //https://www.speedtest.net/global-index
 //https://en.wikipedia.org/wiki/List_of_countries_by_wealth_per_adult
+//https://en.wikipedia.org/wiki/List_of_countries_by_median_age
 
 val countries = CountryList(List(
   Country("Finland", 7.809, 81.9, 112.97, 55532, 42.8),
