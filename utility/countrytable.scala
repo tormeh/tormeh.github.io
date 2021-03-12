@@ -1,4 +1,11 @@
-case class Country(name: String, happiness: Double, lifeExpectancy: Double, broadbandSpeed: Double, medianWealth: Int, medianAge: Double) {
+case class Country(
+  name: String,
+  happiness: Double,
+  lifeExpectancy: Double,
+  broadbandSpeed: Double,
+  medianWealth: Int,
+  medianAge: Double
+  ) {
   val score: Double = happiness * lifeExpectancy + 0.25 * broadbandSpeed + (0.015 * medianWealth / (medianAge - 18))
   def toRow: String = {
     "<tr>" +
