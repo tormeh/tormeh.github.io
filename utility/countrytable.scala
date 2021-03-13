@@ -9,7 +9,7 @@ case class Country(
   broadbandPercentage: Double,
   moralFreedom: Double
   ) {
-  val score: Double = happiness * lifeExpectancy + 0.25 * broadbandSpeed + (0.015 * medianWealth / (medianAge - 18))
+  val score: Double = lifeExpectancy * happiness * moralFreedom
   def toRow: String = {
     "<tr>" +
     "<td>" + name + "</td>" +

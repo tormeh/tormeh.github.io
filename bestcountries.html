@@ -15,7 +15,7 @@
 <body>
 
 <p>Hi, this is my (dumb) list of the best countries. What could go wrong.</p>
-<p>score = happiness * lifeExpectancy + 0.25 * broadbandSpeed + 0.015 * medianWealth / (medianAge - 18)</p>
+<p>score = happiness * lifeExpectancy * moralFreedom</p>
 
 <table>
   <thead>
@@ -23,57 +23,58 @@
       <th> name </th> <th> score </th>
     <th> happiness </th> <th> lifeExpectancy </th>
     <th> broadbandSpeed </th> <th> medianWealth </th>
-    <th> medianAge </th>
+    <th> medianAge </th> <th> landlinePercentage </th>
+    <th> broadbandPercentage </th> <th> moralFreedom </th>
     </tr>
   </thead>
   <tbody>
     
-<tr><td>Switzerland</td><td>818.6933441295546</td><td>7.56</td><td>83.8</td><td>187.08</td><td>227891</td><td>42.7</td></tr>
-<tr><td>Australia</td><td>756.5966615384616</td><td>7.223</td><td>83.4</td><td>58.76</td><td>181361</td><td>37.5</td></tr>
-<tr><td>Luxembourg</td><td>730.1146093023256</td><td>7.238</td><td>82.3</td><td>147.6</td><td>139789</td><td>39.5</td></tr>
-<tr><td>New Zealand</td><td>727.27828125</td><td>7.3</td><td>82.3</td><td>142.1</td><td>116433</td><td>37.2</td></tr>
-<tr><td>Norway</td><td>704.5858511627907</td><td>7.488</td><td>82.4</td><td>153.2</td><td>70627</td><td>39.5</td></tr>
-<tr><td>Denmark</td><td>702.8814000000001</td><td>7.646</td><td>80.9</td><td>190.32</td><td>58784</td><td>42.0</td></tr>
-<tr><td>Canada</td><td>702.2812957983193</td><td>7.232</td><td>82.4</td><td>155.7</td><td>107004</td><td>41.8</td></tr>
-<tr><td>Finland</td><td>701.3875032258065</td><td>7.809</td><td>81.9</td><td>112.97</td><td>55532</td><td>42.8</td></tr>
-<tr><td>Israel</td><td>693.2031290322581</td><td>7.129</td><td>83.0</td><td>125.02</td><td>58066</td><td>30.4</td></tr>
-<tr><td>Ireland</td><td>687.3344575757576</td><td>7.094</td><td>82.3</td><td>96.29</td><td>104842</td><td>37.8</td></tr>
-<tr><td>Singapore</td><td>677.6445295454545</td><td>6.377</td><td>83.6</td><td>247.54</td><td>96967</td><td>35.6</td></tr>
-<tr><td>Sweden</td><td>677.3221987012986</td><td>7.353</td><td>82.8</td><td>165.97</td><td>41582</td><td>41.1</td></tr>
-<tr><td>Netherlands</td><td>670.1621758064516</td><td>7.499</td><td>82.3</td><td>136.84</td><td>31057</td><td>42.8</td></tr>
-<tr><td>United Kingdom</td><td>667.7850309734514</td><td>7.165</td><td>81.3</td><td>82.36</td><td>97452</td><td>40.6</td></tr>
-<tr><td>Austria</td><td>667.060492481203</td><td>7.294</td><td>81.5</td><td>78.21</td><td>94070</td><td>44.6</td></tr>
-<tr><td>France</td><td>662.640553164557</td><td>6.664</td><td>82.7</td><td>188.03</td><td>101942</td><td>41.7</td></tr>
-<tr><td>Belgium</td><td>659.7459169491526</td><td>6.864</td><td>81.6</td><td>100.88</td><td>117093</td><td>41.6</td></tr>
-<tr><td>United States</td><td>641.9414390243902</td><td>6.94</td><td>79.1</td><td>179.06</td><td>65904</td><td>38.5</td></tr>
-<tr><td>Malta</td><td>641.0184567901234</td><td>6.773</td><td>82.5</td><td>141.29</td><td>76016</td><td>42.3</td></tr>
-<tr><td>Spain</td><td>636.2262992277991</td><td>6.401</td><td>83.5</td><td>186.06</td><td>95360</td><td>43.9</td></tr>
-<tr><td>Germany</td><td>621.4413</td><td>7.076</td><td>81.3</td><td>113.55</td><td>35313</td><td>47.8</td></tr>
-<tr><td>Hong Kong</td><td>604.9913913043479</td><td>5.51</td><td>84.9</td><td>229.45</td><td>146887</td><td>45.6</td></tr>
-<tr><td>Italy</td><td>600.9434315789473</td><td>6.387</td><td>83.4</td><td>79.62</td><td>91889</td><td>46.5</td></tr>
-<tr><td>Costa Rica</td><td>594.7623958904111</td><td>7.121</td><td>80.3</td><td>43.32</td><td>11793</td><td>32.6</td></tr>
-<tr><td>United Arab Emirates</td><td>587.0224117647058</td><td>6.791</td><td>78.0</td><td>125.43</td><td>35315</td><td>38.4</td></tr>
-<tr><td>Japan</td><td>585.383168627451</td><td>5.871</td><td>84.6</td><td>138.3</td><td>110408</td><td>48.6</td></tr>
-<tr><td>Czechia</td><td>579.3199316205532</td><td>6.911</td><td>79.4</td><td>72.89</td><td>20854</td><td>43.3</td></tr>
-<tr><td>South Korea</td><td>574.016</td><td>5.872</td><td>83.0</td><td>174.66</td><td>72198</td><td>43.2</td></tr>
-<tr><td>Taiwan</td><td>572.4559277777778</td><td>6.455</td><td>76.43</td><td>143.09</td><td>70191</td><td>42.3</td></tr>
-<tr><td>Chile</td><td>558.7243142857143</td><td>6.228</td><td>80.2</td><td>171.02</td><td>19231</td><td>35.5</td></tr>
-<tr><td>Portugal</td><td>544.8767278195488</td><td>5.911</td><td>82.1</td><td>139.03</td><td>44025</td><td>44.6</td></tr>
-<tr><td>Romania</td><td>527.5278795918367</td><td>6.124</td><td>76.1</td><td>198.01</td><td>19582</td><td>42.5</td></tr>
-<tr><td>Thailand</td><td>520.7888714285715</td><td>5.999</td><td>77.2</td><td>220.59</td><td>3526</td><td>39.0</td></tr>
-<tr><td>Hungary</td><td>518.2311718750001</td><td>6.0</td><td>76.9</td><td>185.92</td><td>17666</td><td>43.6</td></tr>
-<tr><td>Brazil</td><td>513.829002631579</td><td>6.376</td><td>76.7</td><td>79.3</td><td>5031</td><td>33.2</td></tr>
-<tr><td>Mexico</td><td>509.95649999999995</td><td>6.465</td><td>75.1</td><td>44.94</td><td>9944</td><td>29.3</td></tr>
-<tr><td>Greece</td><td>483.65602197802195</td><td>5.515</td><td>82.2</td><td>33.38</td><td>40000</td><td>45.3</td></tr>
-<tr><td>China</td><td>453.03852941176467</td><td>5.124</td><td>77.5</td><td>162.12</td><td>20942</td><td>38.4</td></tr>
-<tr><td>Russia</td><td>427.07075426008976</td><td>5.546</td><td>72.9</td><td>81.16</td><td>3683</td><td>40.3</td></tr>
-<tr><td>Turkey</td><td>413.3219281690141</td><td>5.132</td><td>77.7</td><td>30.51</td><td>6568</td><td>32.2</td></tr>
-<tr><td>Pakistan</td><td>392.47139999999996</td><td>5.693</td><td>67.3</td><td>10.84</td><td>1766</td><td>22.0</td></tr>
-<tr><td>Iran</td><td>368.94995474452554</td><td>4.672</td><td>76.7</td><td>19.42</td><td>5254</td><td>31.7</td></tr>
-<tr><td>India</td><td>269.4861859813084</td><td>3.573</td><td>70.4</td><td>54.73</td><td>3042</td><td>28.7</td></tr>
-<tr><td>Botswana</td><td>253.42953636363637</td><td>3.479</td><td>69.6</td><td>9.71</td><td>4550</td><td>25.7</td></tr>
+<tr><td>Netherlands</td><td>58902.485287999996</td><td>7.499</td><td>82.3</td><td>136.84</td><td>31057</td><td>42.8</td><td>38.45</td><td>42.33</td><td>95.44</td></tr>
+<tr><td>Canada</td><td>54788.59059200001</td><td>7.232</td><td>82.4</td><td>155.7</td><td>107004</td><td>41.8</td><td>40.14</td><td>38.01</td><td>91.94</td></tr>
+<tr><td>Switzerland</td><td>52760.211839999996</td><td>7.56</td><td>83.8</td><td>187.08</td><td>227891</td><td>42.7</td><td>43.33</td><td>45.42</td><td>83.28</td></tr>
+<tr><td>Luxembourg</td><td>52188.173114000005</td><td>7.238</td><td>82.3</td><td>147.6</td><td>139789</td><td>39.5</td><td>47.18</td><td>36.49</td><td>87.61</td></tr>
+<tr><td>Denmark</td><td>51581.835146000005</td><td>7.646</td><td>80.9</td><td>190.32</td><td>58784</td><td>42.0</td><td>25.11</td><td>43.7</td><td>83.39</td></tr>
+<tr><td>Austria</td><td>51159.31366</td><td>7.294</td><td>81.5</td><td>78.21</td><td>94070</td><td>44.6</td><td>43.08</td><td>28.75</td><td>86.06</td></tr>
+<tr><td>Belgium</td><td>50868.499968</td><td>6.864</td><td>81.6</td><td>100.88</td><td>117093</td><td>41.6</td><td>37.2</td><td>38.31</td><td>90.82</td></tr>
+<tr><td>Australia</td><td>49878.57096</td><td>7.223</td><td>83.4</td><td>58.76</td><td>181361</td><td>37.5</td><td>34.6</td><td>32.4</td><td>82.8</td></tr>
+<tr><td>Germany</td><td>48628.316964</td><td>7.076</td><td>81.3</td><td>113.55</td><td>35313</td><td>47.8</td><td>54.07</td><td>40.45</td><td>84.53</td></tr>
+<tr><td>Finland</td><td>48331.330047</td><td>7.809</td><td>81.9</td><td>112.97</td><td>55532</td><td>42.8</td><td>6.85</td><td>30.95</td><td>75.57</td></tr>
+<tr><td>Norway</td><td>46985.40288000001</td><td>7.488</td><td>82.4</td><td>153.2</td><td>70627</td><td>39.5</td><td>14.05</td><td>40.23</td><td>76.15</td></tr>
+<tr><td>Portugal</td><td>46311.520532999995</td><td>5.911</td><td>82.1</td><td>139.03</td><td>44025</td><td>44.6</td><td>46.77</td><td>34.6</td><td>95.43</td></tr>
+<tr><td>Spain</td><td>45992.305174999994</td><td>6.401</td><td>83.5</td><td>186.06</td><td>95360</td><td>43.9</td><td>42.46</td><td>31.22</td><td>86.05</td></tr>
+<tr><td>New Zealand</td><td>45930.3955</td><td>7.3</td><td>82.3</td><td>142.1</td><td>116433</td><td>37.2</td><td>29.07</td><td>33.62</td><td>76.45</td></tr>
+<tr><td>Czechia</td><td>45660.10621399999</td><td>6.911</td><td>79.4</td><td>72.89</td><td>20854</td><td>43.3</td><td>36.95</td><td>28.82</td><td>83.21</td></tr>
+<tr><td>Italy</td><td>45069.699437999996</td><td>6.387</td><td>83.4</td><td>79.62</td><td>91889</td><td>46.5</td><td>34.87</td><td>27.94</td><td>84.61</td></tr>
+<tr><td>Israel</td><td>43946.07889</td><td>7.129</td><td>83.0</td><td>125.02</td><td>58066</td><td>30.4</td><td>38.93</td><td>28.14</td><td>74.27</td></tr>
+<tr><td>Sweden</td><td>43646.907995999994</td><td>7.353</td><td>82.8</td><td>165.97</td><td>41582</td><td>41.1</td><td>28.2</td><td>37.7</td><td>71.69</td></tr>
+<tr><td>Ireland</td><td>43431.574918</td><td>7.094</td><td>82.3</td><td>96.29</td><td>104842</td><td>37.8</td><td>38.68</td><td>29.43</td><td>74.39</td></tr>
+<tr><td>Mexico</td><td>41337.300509999994</td><td>6.465</td><td>75.1</td><td>44.94</td><td>9944</td><td>29.3</td><td>15.95</td><td>13.26</td><td>85.14</td></tr>
+<tr><td>France</td><td>41333.46</td><td>6.664</td><td>82.7</td><td>188.03</td><td>101942</td><td>41.7</td><td>59.54</td><td>43.75</td><td>75.0</td></tr>
+<tr><td>United States</td><td>40446.93072</td><td>6.94</td><td>79.1</td><td>179.06</td><td>65904</td><td>38.5</td><td>36.95</td><td>33.85</td><td>73.68</td></tr>
+<tr><td>United Kingdom</td><td>40310.0034</td><td>7.165</td><td>81.3</td><td>82.36</td><td>97452</td><td>40.6</td><td>50.08</td><td>39.31</td><td>69.2</td></tr>
+<tr><td>Malta</td><td>39521.978924999996</td><td>6.773</td><td>82.5</td><td>141.29</td><td>76016</td><td>42.3</td><td>55.77</td><td>42.09</td><td>70.73</td></tr>
+<tr><td>Brazil</td><td>36413.858832</td><td>6.376</td><td>76.7</td><td>79.3</td><td>5031</td><td>33.2</td><td>19.53</td><td>13.7</td><td>74.46</td></tr>
+<tr><td>Chile</td><td>36177.742008</td><td>6.228</td><td>80.2</td><td>171.02</td><td>19231</td><td>35.5</td><td>17.69</td><td>16.94</td><td>72.43</td></tr>
+<tr><td>Costa Rica</td><td>35469.76508900001</td><td>7.121</td><td>80.3</td><td>43.32</td><td>11793</td><td>32.6</td><td>17.19</td><td>15.17</td><td>62.03</td></tr>
+<tr><td>Greece</td><td>33737.04186</td><td>5.515</td><td>82.2</td><td>33.38</td><td>40000</td><td>45.3</td><td>46.39</td><td>33.86</td><td>74.42</td></tr>
+<tr><td>Hungary</td><td>31961.178</td><td>6.0</td><td>76.9</td><td>185.92</td><td>17666</td><td>43.6</td><td>32.21</td><td>30.41</td><td>69.27</td></tr>
+<tr><td>Singapore</td><td>28425.809103999996</td><td>6.377</td><td>83.6</td><td>247.54</td><td>96967</td><td>35.6</td><td>34.74</td><td>25.76</td><td>53.32</td></tr>
+<tr><td>Romania</td><td>26904.281371999998</td><td>6.124</td><td>76.1</td><td>198.01</td><td>19582</td><td>42.5</td><td>19.77</td><td>24.29</td><td>57.73</td></tr>
+<tr><td>Japan</td><td>26587.633698</td><td>5.871</td><td>84.6</td><td>138.3</td><td>110408</td><td>48.6</td><td>50.16</td><td>31.68</td><td>53.53</td></tr>
+<tr><td>South Korea</td><td>26503.50688</td><td>5.872</td><td>83.0</td><td>174.66</td><td>72198</td><td>43.2</td><td>52.65</td><td>41.58</td><td>54.38</td></tr>
+<tr><td>Russia</td><td>18383.675598</td><td>5.546</td><td>72.9</td><td>81.16</td><td>3683</td><td>40.3</td><td>21.66</td><td>21.44</td><td>45.47</td></tr>
+<tr><td>Hong Kong</td><td>17243.07114</td><td>5.51</td><td>84.9</td><td>229.45</td><td>146887</td><td>45.6</td><td>57.93</td><td>35.92</td><td>36.86</td></tr>
+<tr><td>Turkey</td><td>16803.594696</td><td>5.132</td><td>77.7</td><td>30.51</td><td>6568</td><td>32.2</td><td>14.01</td><td>14.77</td><td>42.14</td></tr>
+<tr><td>Thailand</td><td>16765.04536</td><td>5.999</td><td>77.2</td><td>220.59</td><td>3526</td><td>39.0</td><td>4.22</td><td>11.89</td><td>36.2</td></tr>
+<tr><td>China</td><td>14637.474599999998</td><td>5.124</td><td>77.5</td><td>162.12</td><td>20942</td><td>38.4</td><td>13.75</td><td>26.86</td><td>36.86</td></tr>
+<tr><td>India</td><td>12926.599488000002</td><td>3.573</td><td>70.4</td><td>54.73</td><td>3042</td><td>28.7</td><td>1.73</td><td>1.33</td><td>51.39</td></tr>
+<tr><td>Botswana</td><td>11993.114952</td><td>3.479</td><td>69.6</td><td>9.71</td><td>4550</td><td>25.7</td><td>6.16</td><td>2.13</td><td>49.53</td></tr>
+<tr><td>Pakistan</td><td>8505.683579999999</td><td>5.693</td><td>67.3</td><td>10.84</td><td>1766</td><td>22.0</td><td>1.49</td><td>0.93</td><td>22.2</td></tr>
+<tr><td>United Arab Emirates</td><td>6430.53372</td><td>6.791</td><td>78.0</td><td>125.43</td><td>35315</td><td>38.4</td><td>24.69</td><td>14.0</td><td>12.14</td></tr>
+<tr><td>Iran</td><td>5557.890624</td><td>4.672</td><td>76.7</td><td>19.42</td><td>5254</td><td>31.7</td><td>38.42</td><td>12.39</td><td>15.51</td></tr>
   </tbody>
 </table>
+
 
 
 
