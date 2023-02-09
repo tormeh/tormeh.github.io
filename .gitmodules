@@ -1,0 +1,3 @@
+[submodule "zola_site/homepage/themes/DeepThought"]
+	path = zola_site/homepage/themes/DeepThought
+	url = git@github.com:RatanShreshtha/DeepThought.git
