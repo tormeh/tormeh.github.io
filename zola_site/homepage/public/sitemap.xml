@@ -4,14 +4,37 @@
         <loc>https://tormodhellen.com/</loc>
     </url>
     <url>
-        <loc>https://tormodhellen.com/blog/</loc>
+        <loc>https://tormodhellen.com/categories/</loc>
     </url>
     <url>
-        <loc>https://tormodhellen.com/blog/first/</loc>
-        <lastmod>2019-11-27</lastmod>
+        <loc>https://tormodhellen.com/categories/sample-post/</loc>
     </url>
     <url>
-        <loc>https://tormodhellen.com/blog/second/</loc>
-        <lastmod>2019-11-28</lastmod>
+        <loc>https://tormodhellen.com/categories/sample-post/page/1/</loc>
+    </url>
+    <url>
+        <loc>https://tormodhellen.com/posts/</loc>
+    </url>
+    <url>
+        <loc>https://tormodhellen.com/posts/page/1/</loc>
+    </url>
+    <url>
+        <loc>https://tormodhellen.com/posts/post-0/</loc>
+        <lastmod>2018-08-20</lastmod>
+    </url>
+    <url>
+        <loc>https://tormodhellen.com/tags/</loc>
+    </url>
+    <url>
+        <loc>https://tormodhellen.com/tags/lorem/</loc>
+    </url>
+    <url>
+        <loc>https://tormodhellen.com/tags/lorem/page/1/</loc>
+    </url>
+    <url>
+        <loc>https://tormodhellen.com/tags/post/</loc>
+    </url>
+    <url>
+        <loc>https://tormodhellen.com/tags/post/page/1/</loc>
     </url>
 </urlset>
